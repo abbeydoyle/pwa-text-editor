@@ -18,37 +18,30 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-            // Webpack plugin that generates our html file and injects our bundles. 
-            new HtmlWebpackPlugin({
-              template: './index.html',
-              title: 'JATE'
-            }),
-           
-            // Injects our custom service worker
-            new InjectManifest({
-              swSrc: './src-sw.js',
-              swDest: 'src-sw.js',
-            }),
-      
-            // Creates a manifest.json file.
-            new WebpackPwaManifest({
-              fingerprints: false,
-              inject: true,
-              name: 'Just Another Text Editor',
-              short_name: 'JATE',
-              description: 'Take notes with or without internet connection',
-              background_color: '#225ca3',
-              theme_color: '#225ca3',
-              start_url: './',
-              publicPath: './',
-              icons: [
-                {
-                  src: path.resolve('src/images/logo.png'),
-                  sizes: [96, 128, 192, 256, 384, 512],
-                  destination: path.join('assets', 'icons'),
-                },
-              ],
-            }),
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'Webpack Plugin',
+      }),
+      new InjectManifest ({
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
+      }),
+      new WebpackPwaManifest({
+        name: 'jate',
+        short_name: 'jate',
+        description: 'Just another text editor',
+        background_color: '#7eb4e2',
+        theme_color: '#7eb4e2',
+        start_url: './',
+        publicPath: './',
+        icons: [
+          {
+            src: path.resolve('src/images/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('assets', 'icons'),
+          },
+        ],
+      }),
     ],
 
     module: {
@@ -59,16 +52,14 @@ module.exports = () => {
         },
         {
           test: /\.m?js$/,
-          exclude: /node_modules/,
-          // We use babel-loader in order to use ES6.
+          exclude: /(node_modules|bower_components)/,
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
-            },
-          },
-        },
+              presets: ['@babel/preset-env']
+            }
+          }
+        }
       ],
     },
   };
